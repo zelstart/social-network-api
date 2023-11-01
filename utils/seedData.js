@@ -2,7 +2,7 @@ const connection = require('../config/connection');
 const User = require('../models/User'); 
 const Thought = require('../models/Thought');
 
-// Define some initial users and thoughts
+// define some initial users and thoughts
 const users = [
   {
     username: 'john_doe',
@@ -25,33 +25,37 @@ const users = [
 const thoughts = [
   {
     thoughtText: 'This is a test thought by John',
+    userId: '', // placeholder for user ID
     username: 'john_doe'
   },
   {
     thoughtText: 'Another test thought by Jane',
+    userId: '', // polaceholder for user ID
     username: 'jane_doe'
   }
 ];
 
-// Function to seed the database
+// function to seed the database
 async function seedDatabase() {
   try {
-    // Delete all existing users
+    // delete all existing users
     await User.deleteMany({});
+    await Thought.deleteMany({});
 
-    // Create users
+    // create users
     const createdUsers = await User.insertMany(users);
 
-    // Assign user IDs to thoughts
+    // assign user IDs to thoughts
     const thoughtsWithUserIds = thoughts.map(thought => {
       const user = createdUsers.find(user => user.username === thought.username);
-      return { ...thought, username: user._id };
+      thought.userId = user._id; // assign the user's _id to userId
+      return thought;
     });
 
-    // Create thoughts
+    // create thoughts
     await Thought.insertMany(thoughtsWithUserIds);
 
-    // Add friends
+    // add friends
     const john = createdUsers.find(user => user.username === 'john_doe');
     const jane = createdUsers.find(user => user.username === 'jane_doe');
     const bob = createdUsers.find(user => user.username === 'bob_smith');
@@ -68,10 +72,10 @@ async function seedDatabase() {
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {
-    // Disconnect from the database after seeding
+    // disconnect from the database after seeding
     connection.close();
   }
 }
 
-// Call the seeding function
+// call the seeding function
 seedDatabase();
