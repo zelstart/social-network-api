@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Thought = require('../models/Thought');
 
 module.exports = {
     // /api/users/ -- gets all users
@@ -68,5 +69,37 @@ module.exports = {
         } catch (err) {
             res.status(500).json(err);
         }
+    },
+    // /api/users/:userId/friends/:friendId -- add a new friend to user's friend list
+    async addFriend(req, res) {
+        try {
+            const user = await User.findOne({ _id: req.params.userId })
+            const friend = await User.findOne({ _id: req.params.friendId })
+
+            // if one of these id's doesn't match any in the database, return 404 error
+            if (!user || !friend) {
+                return res.status(404).json({ message: 'User or friend ID was not found.'})
+            }
+
+            // check if users are already friends
+            const alreadyFriends = user.friends.includes(friend._id);
+            if (alreadyFriends) {
+            return res.status(400).json({ message: 'This user is already added as a friend!' })
+            } else {
+                console.log('else statement')
+                const friend = await User.findOne({ _id: req.params.friendId })
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: req.params.userId },
+                    { $addToSet: { friends: friend._id } },
+                    { new: true }
+                );
+                
+                console.log('added friend?')
+                    res.json(updatedUser)
+            }
+        } catch (err) {
+            res.status(500).json(err);
+        }
     }
+    // /api/users/:userId/friends/:friendId -- remove a friend from a user's friend list
 }
