@@ -10,12 +10,20 @@ async getThoughts(req, res) {
     } catch (err) {
         res.status(500).json(err)
     }
+},
+
+// /api/thoughts -- creates a new thought
+async createThought(req, res) {
+    try {
+        const thought = await Thought.create(req.body);
+        res.json(thought)
+    } catch (err) {
+        res.status(500).json(err)
+    }
 }
 
-    // /api/thoughts/:thoughtId -- gets thought by id
 
-
-    // /api/thoughts -- creates a new thought
+// /api/thoughts/:thoughtId -- gets thought by id
 
 
     // /api/thoughts/:thoughtId -- update thought by id
