@@ -62,7 +62,7 @@ module.exports = {
 
             if (!user) {
                 return res.status(404).json({ message: 'No user with that ID' });
-              }
+            }
 
             // await Thought.deleteMany({ id: { $in: user.thoughts }});
             res.json({ message: 'User has been deleted!' })
@@ -78,28 +78,46 @@ module.exports = {
 
             // if one of these id's doesn't match any in the database, return 404 error
             if (!user || !friend) {
-                return res.status(404).json({ message: 'User or friend ID was not found.'})
+                return res.status(404).json({ message: 'User or friend ID was not found.' })
             }
 
             // check if users are already friends
             const alreadyFriends = user.friends.includes(friend._id);
             if (alreadyFriends) {
-            return res.status(400).json({ message: 'This user is already added as a friend!' })
+                return res.status(400).json({ message: 'This user is already added as a friend!' })
             } else {
-                console.log('else statement')
-                const friend = await User.findOne({ _id: req.params.friendId })
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: req.params.userId },
                     { $addToSet: { friends: friend._id } },
                     { new: true }
                 );
-                
-                console.log('added friend?')
-                    res.json(updatedUser)
+                res.json(updatedUser)
             }
         } catch (err) {
             res.status(500).json(err);
         }
-    }
+    },
     // /api/users/:userId/friends/:friendId -- remove a friend from a user's friend list
+    async deleteFriend(req, res) {
+        try {
+            const user = await User.findOne({ _id: req.params.userId })
+            const friend = await User.findOne({ _id: req.params.friendId })
+            
+            // check if users are friends
+            const areFriends = user.friends.includes(friend._id);
+            if (!areFriends) {
+                return res.status(400).json({ message: 'You are not friends with this user!' })
+            } else {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: req.params.userId },
+                    { $pull: { friends: friend._id } },
+                    { new: true }
+                );
+                res.json(updatedUser)
+            }
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    }
+
 }
