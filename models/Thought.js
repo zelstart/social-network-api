@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const { format } = require('date-fns');
 
+
 const reactionSchema = new Schema({
   reactionId: {
     type: Schema.Types.ObjectId,
@@ -20,7 +21,13 @@ const reactionSchema = new Schema({
     default: Date.now,
     get: (timestamp) => format(timestamp, 'MM-dd-yyyy hh:mm:ss a')
   }
-});
+},
+{
+  toJSON: {
+    virtuals: true,
+  }
+}
+);
 
 const thoughtSchema = new Schema({
   thoughtText: {
@@ -39,7 +46,13 @@ const thoughtSchema = new Schema({
     required: true
   },
   reactions: [reactionSchema]
-});
+},
+{
+  toJSON: {
+    virtuals: true,
+  }
+}
+);
 
 thoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
