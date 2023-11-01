@@ -5,10 +5,10 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index",
-    "seed": "node utils/seed",
-    "heroku-postbuild": "node utils/seed.js"
+    "start": "node server",
+    "dev": "nodemon server",
+    "seed": "node utils/seedData",
+    "heroku-postbuild": "node utils/seedData.js"
   },
   "dependencies": {
     "date-fns": "^2.30.0",
