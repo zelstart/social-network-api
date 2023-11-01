@@ -11,7 +11,6 @@ async getThoughts(req, res) {
         res.status(500).json(err)
     }
 },
-
 // /api/thoughts -- creates a new thought
 async createThought(req, res) {
     try {
@@ -20,11 +19,23 @@ async createThought(req, res) {
     } catch (err) {
         res.status(500).json(err)
     }
+},
+    // /api/thoughts/:thoughtId -- gets thought by id
+async getSingleThought(req, res) {
+    try {
+        const thought = await Thought.findOne({ _id: req.params.thoughtId })
+        .select('-__v')
+
+        if (!thought) {
+            return res.status(404).json({ message: 'No thought with that ID'})
+        }
+
+        res.json(thought)
+        
+    } catch (err) {
+        res.status(500).json(err)
+    }
 }
-
-
-// /api/thoughts/:thoughtId -- gets thought by id
-
 
     // /api/thoughts/:thoughtId -- update thought by id
 
