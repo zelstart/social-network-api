@@ -86,7 +86,7 @@ module.exports = {
             // add the reaction into the reaction array of the thought object
             const updatedThought = await Thought.findByIdAndUpdate(
                 thoughtId,
-                { $push: { reactions: { reactionBody, username },},},
+                { $push: { reactions: { reactionBody, username } } },
                 { runValidators: true, new: true }
             );
 
