@@ -22,19 +22,6 @@ const users = [
   }
 ];
 
-const thoughts = [
-  {
-    thoughtText: 'This is a test thought by John',
-    userId: '', // placeholder for user ID
-    username: 'john_doe'
-  },
-  {
-    thoughtText: 'Another test thought by Jane',
-    userId: '', // polaceholder for user ID
-    username: 'jane_doe'
-  }
-];
-
 // function to seed the database
 async function seedDatabase() {
   try {
@@ -44,16 +31,6 @@ async function seedDatabase() {
 
     // create users
     const createdUsers = await User.insertMany(users);
-
-    // assign user IDs to thoughts
-    const thoughtsWithUserIds = thoughts.map(thought => {
-      const user = createdUsers.find(user => user.username === thought.username);
-      thought.userId = user._id; // assign the user's _id to userId
-      return thought;
-    });
-
-    // create thoughts
-    await Thought.insertMany(thoughtsWithUserIds);
 
     // add friends
     const john = createdUsers.find(user => user.username === 'john_doe');
@@ -76,6 +53,7 @@ async function seedDatabase() {
     connection.close();
   }
 }
+
 
 // call the seeding function
 seedDatabase();
