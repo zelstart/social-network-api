@@ -5,6 +5,7 @@ module.exports = {
 async getThoughts(req, res) {
     try {
          const thoughts = await Thought.find()
+         .select('-__v');
          res.json(thoughts)
     } catch (err) {
         res.status(500).json(err)
@@ -75,11 +76,36 @@ async deleteThought(req, res) {
     } catch (err) {
         res.status(500).json(err)
     }
-}
-
-
+},
     // /api/thoughts/:thoughtId/reactions -- create a reaction to a thought
+async addReaction(req, res) {
+    try {
+        const { reactionBody, username } = req.body;
+        const thoughtId = req.params.thoughtId;
+    
+        const updatedThought = await Thought.findByIdAndUpdate(
+          thoughtId,
+          {
+            $push: {
+              reactions: {
+                reactionBody,
+                username,
+              },
+            },
+          },
+          { runValidators: true, new: true }
+        );
+    
+        if (!updatedThought) {
+          return res.status(404).json({ message: 'Thought not found' });
+        }
+    
+        res.json({ message: 'Reaction created successfully', updatedThought });
 
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
 
     // api/thoughts/:thoughtId/reactions -- delete a reaction to a thought
 
