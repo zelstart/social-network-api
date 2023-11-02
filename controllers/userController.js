@@ -5,9 +5,7 @@ module.exports = {
     async getUsers(req, res) {
         try {
             const users = await User.find()
-            .populate({ path: 'thoughts', select: '-__v'})
             .select('-__v');
-
             res.json(users);
         } catch (err) {
             res.status(500).json(err);
@@ -28,6 +26,7 @@ module.exports = {
             const user = await User.findOne({ _id: req.params.userId })
             .populate({ path: 'thoughts', select: '-__v'})
             .select('-__v');
+
 
             if (!user) {
                 return res.status(404).json({ message: 'No user with that ID' });
