@@ -83,6 +83,7 @@ module.exports = {
             const { reactionBody, username } = req.body;
             const thoughtId = req.params.thoughtId;
 
+            // add the reaction into the reaction array of the thought object
             const updatedThought = await Thought.findByIdAndUpdate(
                 thoughtId,
                 { $push: { reactions: { reactionBody, username },},},
@@ -104,6 +105,7 @@ module.exports = {
         try {
             const { thoughtId, reactionId } = req.params;
 
+            // remove the reaction from the reactions array in the thought object
             const updatedThought = await Thought.findByIdAndUpdate(
                 thoughtId,
                 { $pull: { reactions: { _id: reactionId } } },
