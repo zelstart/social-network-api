@@ -56,12 +56,26 @@ async updateThought(req, res) {
         }
 
         res.json(thought)
+
+    } catch (err) {
+        res.status(500).json(err)
+    }
+},
+    // api/thoughts/thought:Id -- delete thought by id
+async deleteThought(req, res) {
+    try {
+        const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId })
         
+        if (!thought) {
+            return res.status(404).json({ message: 'No thought with that ID'})
+        }
+
+        res.json({ message: 'Thought has been deleted.'})
+    
     } catch (err) {
         res.status(500).json(err)
     }
 }
-    // api/thoughts/thought:Id -- delete thought by id
 
 
     // /api/thoughts/:thoughtId/reactions -- create a reaction to a thought
