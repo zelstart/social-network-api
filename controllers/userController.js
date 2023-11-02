@@ -27,7 +27,6 @@ module.exports = {
             .populate({ path: 'thoughts', select: '-__v'})
             .select('-__v');
 
-
             if (!user) {
                 return res.status(404).json({ message: 'No user with that ID' });
             }
