@@ -15,12 +15,12 @@ async createThought(req, res) {
     try {
         const thought = await Thought.create(req.body);
 
-        const updatedUser = await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
             { username: req.body.username },
             { $push: { thoughts: thought._id } },
             { new: true }
         );
-        
+
         res.json(thought)
     } catch (err) {
         res.status(500).json(err)
