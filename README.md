@@ -6,7 +6,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Dependencies](#dependencies)
-- [Credits](#credits)
 - [License](#license)
 
 ## Description
