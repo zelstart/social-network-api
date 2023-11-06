@@ -26,8 +26,7 @@ Follow these steps to set up the project on your local machine:
 4. Use a program like Insomnia or Postman to interact with the API endpoints for creating, editing, and deleting users, thoughts, and reactions.
 
 ## Usage
-[Demo Video](https://watch.screencastify.com/v/UpfiXEihjj1ELPXGTyQe)
-
+[Demo Video](https://watch.screencastify.com/v/UpfiXEihjj1ELPXGTyQe)  
 If the demo video here is unavailable, you can also find one in /assets/demo-video.
 
 ### USERS
